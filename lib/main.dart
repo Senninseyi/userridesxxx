@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:userrides/screen/loginScreen.dart';
 import 'package:userrides/screen/mainScreen.dart';
 
 void main() {
@@ -12,11 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'XXX Rides',
+      title: 'XXX Rider App',
       theme: ThemeData(
+        fontFamily: "Brand-Bold",
         primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainScreen(),
+      // home: const MainScreen(),
+      home: const LoginScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
