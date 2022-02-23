@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:userrides/screen/registerScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  static const String idScreen = "Login";
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +97,7 @@ class LoginScreen extends StatelessWidget {
               FlatButton(
                 onPressed: ()
                   {
-                    print("Clicked");
+                    Navigator.pushReplacementNamed(context, RegisterScreen.idScreen);
                   },
                 child: const Text(
                   "Do not have account? Register Here"

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:userrides/screen/loginScreen.dart';
 import 'package:userrides/screen/mainScreen.dart';
+import 'package:userrides/screen/registerScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,8 +20,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: const MainScreen(),
-      home: const LoginScreen(),
+      initialRoute: LoginScreen.idScreen,
+      routes: {
+        RegisterScreen.idScreen: (context) => RegisterScreen(),
+        LoginScreen.idScreen: (context) => LoginScreen(),
+        MainScreen.idScreen: (context) => MainScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
