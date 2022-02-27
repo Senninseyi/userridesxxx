@@ -1,10 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:userrides/main.dart';
 import 'package:userrides/screen/loginScreen.dart';
+import 'package:userrides/screen/mainScreen.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  RegisterScreen({Key? key}) : super(key: key);
 
   static const String idScreen = "Register";
+
+  TextEditingController nameTextEditingController = TextEditingController();
+  TextEditingController emailTextEditingController = TextEditingController();
+  TextEditingController phoneTextEditingController = TextEditingController();
+  TextEditingController passwordTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -12,35 +21,36 @@ class RegisterScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Column(
             children: [
-              const SizedBox(height: 45.0,),
-              const Image(
+              SizedBox(height: 45.0,),
+              Image(
                 image: AssetImage("images/logo.png"),
                 width: 500.0,
                 height: 250.0,
                 alignment: Alignment.center,
               ),
 
-              const SizedBox(height: 1.0,),
-              const Text(
+              SizedBox(height: 1.0,),
+              Text(
                 "Register as Riders",
-                style: const TextStyle(fontSize: 24.0, fontFamily: "Brand-Bold"),
+                style: TextStyle(fontSize: 24.0, fontFamily: "Brand-Bold"),
                 textAlign: TextAlign.center,
               ),
 
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: [
 
-                    const SizedBox(height: 1.0,),
-                    const TextField(
+                    SizedBox(height: 1.0,),
+                    TextField(
+                      controller: nameTextEditingController,
                       keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelText: "Name",
-                          labelStyle: const TextStyle(
+                          labelStyle: TextStyle(
                             fontSize: 14.0,
                           ),
                           hintStyle: TextStyle(
@@ -48,15 +58,16 @@ class RegisterScreen extends StatelessWidget {
                               fontSize: 10.0
                           )
                       ),
-                      style: const TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 14.0),
                     ),
 
-                    const SizedBox(height: 20.0,),
-                    const TextField(
+                    SizedBox(height: 20.0,),
+                    TextField(
+                      controller: emailTextEditingController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelText: "Email",
-                          labelStyle: const TextStyle(
+                          labelStyle: TextStyle(
                             fontSize: 14.0,
                           ),
                           hintStyle: TextStyle(
@@ -64,15 +75,16 @@ class RegisterScreen extends StatelessWidget {
                               fontSize: 10.0
                           )
                       ),
-                      style: const TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 14.0),
                     ),
 
-                    const SizedBox(height: 20.0,),
-                    const TextField(
+                    SizedBox(height: 20.0,),
+                    TextField(
+                      controller: phoneTextEditingController,
                       keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelText: "Phone",
-                          labelStyle: const TextStyle(
+                          labelStyle: TextStyle(
                             fontSize: 14.0,
                           ),
                           hintStyle: TextStyle(
@@ -80,14 +92,15 @@ class RegisterScreen extends StatelessWidget {
                               fontSize: 10.0
                           )
                       ),
-                      style: const TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 14.0),
                     ),
 
-                    const SizedBox(height: 20.0,),
-                    const TextField(
+                    SizedBox(height: 20.0,),
+                    TextField(
+                      controller: passwordTextEditingController,
                       obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelText: "Password",
                           labelStyle: TextStyle(
                             fontSize: 14.0,
@@ -100,25 +113,43 @@ class RegisterScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 14.0),
                     ),
 
-                    const SizedBox(height: 30.0,),
+                    SizedBox(height: 30.0,),
                     RaisedButton(
                       color: Colors.yellow,
                       textColor: Colors.white,
                       child: Container(
                         height: 50.0,
-                        child: const Center(
-                          child: const Text(
+                        child: Center(
+                          child: Text(
                             "Create Account",
-                            style: TextStyle(fontSize: 18.0, fontFamily: "Brand-Bold"),
+                            style: TextStyle(
+                                fontSize: 18.0, fontFamily: "Brand-Bold"),
                           ),
                         ),
                       ),
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(24.0)
                       ),
-                      onPressed: ()
-                      {
-                        print("Register Button Clicked");
+                      onPressed: () {
+                        // print("Register Button Clicked");
+                        if (nameTextEditingController.text.length < 3) {
+                          displayToastMessage(
+                              "name must be at least 3 characters", context);
+                        } else
+                        if (!emailTextEditingController.text.contains("@")) {
+                          displayToastMessage("email address is invalid",
+                              context);
+                        } else if (phoneTextEditingController.text.isEmpty) {
+                          displayToastMessage(
+                              "phone number is mandatory", context);
+                        } else if (passwordTextEditingController.text.length <
+                            6) {
+                          displayToastMessage(
+                              "password must be at least 6 characters",
+                              context);
+                        } else {
+                          registerNewUser(context);
+                        }
                       },
                     )
 
@@ -127,11 +158,11 @@ class RegisterScreen extends StatelessWidget {
               ),
 
               FlatButton(
-                  onPressed: ()
-                  {
-                    Navigator.pushReplacementNamed(context, LoginScreen.idScreen);
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, LoginScreen.idScreen);
                   },
-                  child: const Text(
+                  child: Text(
                       "Already have an account! Login here"
                   )
               )
@@ -143,4 +174,46 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  void registerNewUser(BuildContext context) async {
+    try {
+      UserCredential _userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(
+        email: emailTextEditingController.text,
+        password: passwordTextEditingController.text,
+      );
+
+      if (_userCredential != null) {
+        //save to database
+        Map userDataMap = {
+          "name": nameTextEditingController.text.trim(),
+          "email": emailTextEditingController.text.trim(),
+          "phone": phoneTextEditingController.text.trim(),
+        };
+        
+        usersRef.child(_userCredential.user!.uid).set(userDataMap);
+        displayToastMessage("Congratulations, your account has been created.", context);
+        Navigator.pushReplacementNamed(context, MainScreen.idScreen);
+      } else {
+        // error message
+        displayToastMessage("ew user has not been created", context);
+      }
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        // print('The account already exists for that email.');
+        displayToastMessage('The account already exists for that email.', context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+}
+
+displayToastMessage(String message, BuildContext context){
+  Fluttertoast.showToast(msg: message);
 }
